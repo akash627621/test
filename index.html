@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>For my Baby ❤️</title>
+  <title>For Harman my Baby ❤️</title>
 
   <style>
     * {
@@ -418,6 +418,93 @@
       pointer-events: none;
     }
 
+    .lock-screen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #831843, #be185d, #f9a8d4);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .lock-card {
+      width: min(420px, 92vw);
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 30px;
+      padding: 38px 28px;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.22);
+      animation: fadeUp 0.9s ease;
+    }
+
+    .lock-heart {
+      font-size: 52px;
+      animation: pulse 1.7s infinite;
+      margin-bottom: 15px;
+    }
+
+    .lock-card h2 {
+      color: #831843;
+      font-size: 34px;
+      margin-bottom: 12px;
+    }
+
+    .lock-card p {
+      color: #6b2b45;
+      font-size: 18px;
+      margin-bottom: 22px;
+    }
+
+    .lock-card input {
+      width: 100%;
+      padding: 15px 18px;
+      border-radius: 999px;
+      border: 2px solid #f9a8d4;
+      font-size: 17px;
+      text-align: center;
+      outline: none;
+      margin-bottom: 16px;
+    }
+
+    .lock-card button {
+      width: 100%;
+      background: linear-gradient(135deg, #be185d, #ec4899);
+      color: white;
+      border: none;
+      padding: 15px 20px;
+      border-radius: 999px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 12px 28px rgba(190, 24, 93, 0.3);
+    }
+
+    .password-error {
+      margin-top: 14px;
+      color: #be123c;
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+      min-height: 22px;
+    }
+
+    .music-btn {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 1000;
+      background: linear-gradient(135deg, #be185d, #ec4899);
+      color: white;
+      border: none;
+      border-radius: 999px;
+      padding: 13px 20px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 12px 28px rgba(190, 24, 93, 0.35);
+      display: none;
+    }
+
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(35px); }
       to { opacity: 1; transform: translateY(0); }
@@ -466,10 +553,26 @@
 </head>
 
 <body>
+  <div id="lockScreen" class="lock-screen">
+    <div class="lock-card">
+      <div class="lock-heart">❤️</div>
+      <h2>Private Love Letter</h2>
+      <p>This page is only for you, baby.</p>
+      <input type="password" id="passwordInput" placeholder="Enter password" />
+      <button onclick="unlockSite()">Open My Heart ❤️</button>
+      <div id="passwordError" class="password-error"></div>
+    </div>
+  </div>
+
+  <audio id="bgMusic" loop>
+    <source src="song.mp3" type="audio/mpeg">
+  </audio>
+
+  <button id="musicBtn" class="music-btn" onclick="toggleMusic()">🎵 Play Music</button>
   <header>
     <div class="hero-card">
       <div class="small-title">A little piece of my heart</div>
-      <h1>For my sweetheart</h1>
+      <h1>For Harman</h1>
       <div class="heart">❤️</div>
       <p>
         Some people come into life like a beautiful surprise, but you came into mine like a blessing.
@@ -639,6 +742,47 @@
   </footer>
 
   <script>
+    const sitePassword = 'harman';
+    let currentPhoto = 0;
+    let musicPlaying = false;
+
+    function unlockSite() {
+      const input = document.getElementById('passwordInput');
+      const error = document.getElementById('passwordError');
+      const lockScreen = document.getElementById('lockScreen');
+      const musicBtn = document.getElementById('musicBtn');
+
+      if (input.value.trim().toLowerCase() === sitePassword) {
+        lockScreen.style.display = 'none';
+        musicBtn.style.display = 'block';
+        window.scrollTo(0, 0);
+      } else {
+        error.textContent = 'Wrong password, try again ❤️';
+        input.value = '';
+      }
+    }
+
+    document.getElementById('passwordInput').addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        unlockSite();
+      }
+    });
+
+    function toggleMusic() {
+      const music = document.getElementById('bgMusic');
+      const btn = document.getElementById('musicBtn');
+
+      if (!musicPlaying) {
+        music.play();
+        btn.textContent = '⏸ Pause Music';
+        musicPlaying = true;
+      } else {
+        music.pause();
+        btn.textContent = '🎵 Play Music';
+        musicPlaying = false;
+      }
+    }
+
     function openEnvelope() {
       const envelope = document.getElementById('envelope');
       envelope.classList.toggle('open');
@@ -648,8 +792,6 @@
       const message = document.getElementById('hiddenMessage');
       message.classList.toggle('show');
     }
-
-    let currentPhoto = 0;
 
     function nextPhoto() {
       const photos = document.querySelectorAll('.photo');
